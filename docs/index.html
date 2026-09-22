@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fact, Claim &amp; Evidence Verification — Debunks Count As Findings</title>
+<meta name="description" content="Tier every factual claim in a manuscript by evidence strength before print, and treat a debunked popular claim as equally valuable as a confirmed one.">
+<meta property="og:title" content="Fact, Claim & Evidence Verification">
+<meta property="og:description" content="STRONG. MODERATE. SPECULATIVE. Debunks count as findings — never quietly dropped.">
+<meta property="og:image" content="https://nftyoginis.github.io/fact-claim-verification-skill/og-image.png">
+<meta property="og:type" content="website">
+<style>
+  :root {
+    --paper: #f5f6f4; --ink: #1c2024; --muted: #5a6169;
+    --slate: #35516b; --surface: #eceeec; --border: #dbdfd9;
+    --strong: #2f7a4d; --moderate: #b5731a; --speculative: #a33d3d;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background: var(--paper); color: var(--ink); line-height: 1.6;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  nav { position: sticky; top: 0; z-index: 10; background: rgba(245,246,244,0.96); border-bottom: 1px solid var(--border); backdrop-filter: blur(4px); }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; }
+  .brand { font-weight: 700; font-size: 1.05rem; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; }
+  .brand span { color: var(--slate); }
+  .navlinks { display: flex; gap: 22px; align-items: center; }
+  .navlinks a { color: var(--muted); text-decoration: none; font-size: 0.95rem; }
+  .navlinks a:hover { color: var(--slate); }
+  .btn { display: inline-block; padding: 10px 20px; border-radius: 6px; font-weight: 600; text-decoration: none; font-size: 0.95rem; border: 1px solid transparent; cursor: pointer; }
+  .btn-primary { background: var(--slate); color: #fff; }
+  .btn-primary:hover { background: #2a415a; }
+  .btn-ghost { background: transparent; color: var(--ink); border-color: var(--border); }
+  .btn-ghost:hover { border-color: var(--slate); color: var(--slate); }
+  header.hero { padding: 96px 0 72px; text-align: center; }
+  .kicker { display: inline-block; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--slate); border: 1px solid var(--slate); border-radius: 20px; padding: 4px 14px; margin-bottom: 24px; }
+  header.hero h1 { font-size: 2.5rem; line-height: 1.2; margin: 0 0 20px; max-width: 780px; margin-left: auto; margin-right: auto; }
+  header.hero p.sub { font-size: 1.15rem; color: var(--muted); max-width: 680px; margin: 0 auto 36px; }
+  .hero-ctas { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  section { padding: 64px 0; border-top: 1px solid var(--border); }
+  section h2 { font-size: 1.8rem; margin-bottom: 8px; }
+  section p.lead { color: var(--muted); max-width: 700px; margin-bottom: 40px; }
+  .tier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .tier-card { background: #fff; border: 1px solid var(--border); border-top: 4px solid var(--t); border-radius: 10px; padding: 24px; }
+  .tier-card .badge { display: inline-block; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: #fff; background: var(--t); padding: 4px 12px; border-radius: 14px; margin-bottom: 14px; }
+  .tier-card p { margin: 0 0 10px; color: var(--muted); font-size: 0.92rem; }
+  .tier-card .ex { color: var(--ink); font-style: italic; font-size: 0.9rem; }
+  .debunk-box { background: #fff; border: 1px solid var(--speculative); border-left: 4px solid var(--speculative); border-radius: 8px; padding: 24px 28px; margin-top: 32px; }
+  .debunk-box .tag { color: var(--speculative); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+  .debunk-box p { margin: 10px 0 0; color: var(--ink); }
+  .safety-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  .safety-table th, .safety-table td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 0.88rem; vertical-align: top; }
+  .safety-table th { color: var(--muted); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; }
+  .safety-table .abs { color: var(--speculative); font-weight: 700; }
+  .safety-table .rel { color: var(--moderate); font-weight: 700; }
+  .banner-demo { background: var(--surface); border: 1px dashed var(--slate); border-radius: 8px; padding: 20px 24px; margin-top: 24px; font-size: 0.9rem; color: var(--ink); }
+  .banner-demo strong { color: var(--slate); }
+  .proof-block { background: var(--surface); border: 1px dashed var(--border); border-radius: 10px; padding: 40px; text-align: center; color: var(--muted); }
+  ol.setup-steps { padding-left: 20px; }
+  ol.setup-steps li { margin-bottom: 14px; }
+  .faq-item { margin-bottom: 28px; }
+  .faq-item h3 { font-size: 1.05rem; margin: 0 0 8px; }
+  .faq-item p { color: var(--muted); margin: 0; }
+  footer { padding: 48px 0; border-top: 1px solid var(--border); text-align: center; color: var(--muted); font-size: 0.9rem; }
+  footer a { color: var(--slate); text-decoration: none; }
+  @media (max-width: 640px) { .navlinks { display: none; } header.hero h1 { font-size: 2rem; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top">Fact&amp;<span>Claim</span></a>
+    <div class="navlinks">
+      <a href="#tiers">The tiers</a>
+      <a href="#safety">Safety file</a>
+      <a href="#sourcing">Sourcing</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn btn-primary" href="#setup">Get started</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <span class="kicker">Tiering, not gatekeeping</span>
+    <h1>STRONG. MODERATE. SPECULATIVE. A debunk is worth exactly as much as a confirmation.</h1>
+    <p class="sub">Every factual, scientific, or physiological claim in a manuscript gets tiered by evidence strength — claim-by-claim, not file-by-file — before print. A popular claim that doesn't hold up is reported as a finding, never quietly dropped because it's inconvenient.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="#tiers">See the tier taxonomy</a>
+      <a class="btn btn-ghost" href="https://github.com/NFTYoginis/fact-claim-verification-skill">View on GitHub</a>
+    </div>
+  </div>
+</header>
+
+<section id="tiers">
+  <div class="wrap">
+    <h2>Three tiers, applied claim-by-claim</h2>
+    <p class="lead">The same source can support one tier for what it shows in a study, and a different tier for the human claim built on top of it.</p>
+    <div class="tier-grid">
+      <div class="tier-card" style="--t: var(--strong);">
+        <span class="badge">STRONG</span>
+        <p>Well-replicated human evidence, or genuine consensus.</p>
+        <p class="ex">"Autophagy is a conserved cellular degradation pathway — one of the most solidly established facts in cell biology."</p>
+      </div>
+      <div class="tier-card" style="--t: var(--moderate);">
+        <span class="badge">MODERATE</span>
+        <p>Small trials, mostly animal/mechanistic, mixed human results.</p>
+        <p class="ex">"Nutrient restriction reliably activates autophagy in animal models — strong there, moderate as a basis for human claims."</p>
+      </div>
+      <div class="tier-card" style="--t: var(--speculative);">
+        <span class="badge">SPECULATIVE</span>
+        <p>Hypothesis, or popular claim, weak support. Debunks land here too.</p>
+        <p class="ex">"Autophagy kicks in at 16 hours of fasting" — not supported in humans even at 24 hours.</p>
+      </div>
+    </div>
+    <div class="debunk-box">
+      <span class="tag">The refusal gate this skill runs on</span>
+      <p><strong>"I won't drop a claim just because the evidence debunks it — a debunked popular claim is tagged [SPECULATIVE / debunk] and reported as a finding, exactly like a confirmed one, never quietly omitted."</strong> The mechanism checking out doesn't rescue the specific number built on top of it.</p>
+    </div>
+  </div>
+</section>
+
+<section id="safety">
+  <div class="wrap">
+    <h2>The safety file — over-cautious by design</h2>
+    <p class="lead">Where a topic carries real physical risk, contraindications get their own dedicated file, separate from general research, so they can't be diluted.</p>
+    <table class="safety-table">
+      <tr><th>Tier</th><th>What it means</th><th>Example</th></tr>
+      <tr><td class="abs">ABSOLUTE</td><td>Consensus says "do not," not "be careful"</td><td>Pregnancy, type 1 diabetes, active eating-disorder history</td></tr>
+      <tr><td class="rel">RELATIVE</td><td>Possible, but only with clinical screening + monitoring</td><td>Daily prescription medication, cardiac risk factors</td></tr>
+    </table>
+    <div class="debunk-box" style="border-color:var(--moderate); border-left-color:var(--moderate);">
+      <span class="tag" style="color:var(--moderate);">The danger isn't always where you'd expect</span>
+      <p>For extended fasting, the most dangerous moment is often not the fast itself but the <strong>refeeding</strong> — reintroducing food too fast can trigger a potentially fatal electrolyte collapse. Naming that explicitly is what a safety file is for.</p>
+    </div>
+  </div>
+</section>
+
+<section id="sourcing">
+  <div class="wrap">
+    <h2>When a source can't be read — say so first</h2>
+    <p class="lead">A blocked tool or an unreadable primary source is normal. Hiding it isn't an option.</p>
+    <div class="banner-demo">
+      <strong>SOURCING CONFIDENCE — READ FIRST.</strong> [Tool] was blocked for this job. Every figure below is reconstructed from secondary summaries, not the primary source. Verify before it goes into the book or a marketing claim. Per-finding confidence tagged inline.
+    </div>
+  </div>
+</section>
+
+<section id="proof">
+  <div class="wrap">
+    <h2>Manuscripts verified on this discipline</h2>
+    <div class="proof-block">
+      <!-- TODO: operator — add real claim counts/tier breakdowns/links, once ready to name them publicly -->
+      Proof of shipped verification passes goes here — added by the operator, not invented.
+    </div>
+  </div>
+</section>
+
+<section id="setup">
+  <div class="wrap">
+    <h2>Setup</h2>
+    <ol class="setup-steps">
+      <li>Load this folder into a Claude Project, or point a Claude Code session at it — <code>SKILL.md</code> lets it auto-discover and trigger from a natural request.</li>
+      <li>Bring the manuscript's claims and any claim-sensitivity flags from extraction — this skill grades what's already been claimed, it doesn't research from scratch.</li>
+      <li>Let it tier every claim, claim-by-claim, and produce a dedicated safety file if the topic warrants one.</li>
+      <li>Any source that couldn't be read directly gets a sourcing-confidence banner before any finding, not after.</li>
+      <li>Hand the tiered results to revision and to downstream content — never a looser tier than what was actually earned.</li>
+    </ol>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <h2>FAQ</h2>
+    <div class="faq-item">
+      <h3>Does it find the sources itself?</h3>
+      <p>No — that's the Research worker's job. This skill tiers and flags claims and sources it's handed or pointed at.</p>
+    </div>
+    <div class="faq-item">
+      <h3>What if a claim debunks something the book wants to say?</h3>
+      <p>It gets reported anyway, tagged [SPECULATIVE / debunk] — see the refusal gate above. A debunk is a finding, not a loss.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Can it soften a safety warning if it's inconvenient for a chapter?</h3>
+      <p>No. ABSOLUTE contraindications never get downgraded to RELATIVE to make a chapter read more permissive.</p>
+    </div>
+    <div class="faq-item">
+      <h3>What happens if a fetch tool is blocked mid-research?</h3>
+      <p>The file states it plainly at the top, before any finding, and tags every downstream figure as unverified until it's actually checked.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    MIT License · <a href="https://github.com/NFTYoginis/fact-claim-verification-skill">GitHub</a>
+  </div>
+</footer>
+
+</body>
+</html>
